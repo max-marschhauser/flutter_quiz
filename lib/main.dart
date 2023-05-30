@@ -42,7 +42,13 @@ void main() {
                 ),
                 OutlinedButton(
                   onPressed: pressedButton,
-                  child: const Text('Start quiz'),
+                  child: const Text(
+                    'Start quiz',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
                 )
               ],
             ),
