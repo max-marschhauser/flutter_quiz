@@ -12,7 +12,9 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  Widget?
+// 1.način, u varijablu se spremi cijeli widget pa se njega prebacuje uokolo
+/*
+Widget?
       activeScreen; // kreiranje varijable s tipom widget, a upitnik govori da je u prvom trenutku null, ali kasnije postate widget
 
   @override
@@ -23,9 +25,22 @@ class _QuizState extends State<Quiz> {
     super.initState();
   }
 
+
   void switchScreen() {
     setState(() {
       activeScreen = const QuestionsScreen();
+    });
+  }
+
+  */
+
+// 2.način, u varijablu se spremi nekakav identifikator npr. string ili broj
+
+  var activeScreen = "start-screen";
+
+  void switchScreen() {
+    setState(() {
+      activeScreen = 'questions-screen';
     });
   }
 
@@ -45,7 +60,10 @@ class _QuizState extends State<Quiz> {
               end: Alignment.bottomRight,
             ),
           ),
-          child: activeScreen,
+          //child: activeScreen, // 1. način
+          child: activeScreen == 'start-screen'
+              ? StartScreen(switchScreen)
+              : const QuestionsScreen(), // 2. način
         ),
       ),
     );
