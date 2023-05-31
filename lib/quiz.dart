@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quiz/data/questions.dart';
 import 'package:flutter_quiz/questions_screen.dart';
 import 'package:flutter_quiz/start_screen.dart';
 
@@ -35,7 +36,7 @@ Widget?
   */
 
 // 2.način, u varijablu se spremi nekakav identifikator npr. string ili broj
-
+  List<String> selectedAnswers = [];
   var activeScreen = "start-screen";
 
   void switchScreen() {
@@ -44,9 +45,27 @@ Widget?
     });
   }
 
+  void chooseAnswer(String answer) {
+    selectedAnswers.add(answer);
+
+    if (selectedAnswers.length == questions.length) {
+      setState(() {
+        selectedAnswers = [];
+        activeScreen = 'start-screen';
+      });
+    }
+  }
+
   @override
   Widget build(context) {
-    // poslije return ide sadržaj, a gore je konfiguracija statea
+    Widget screenWidget = StartScreen(switchScreen);
+
+    if (activeScreen == 'questions-screen') {
+      screenWidget = QuestionsScreen(
+        onSelectAnswer: chooseAnswer,
+      );
+    }
+
     return MaterialApp(
       home: Scaffold(
         body: Container(
@@ -61,9 +80,11 @@ Widget?
             ),
           ),
           //child: activeScreen, // 1. način
-          child: activeScreen == 'start-screen'
+          /*child: activeScreen == 'start-screen'
               ? StartScreen(switchScreen)
               : const QuestionsScreen(), // 2. način
+              */
+          child: screenWidget,
         ),
       ),
     );
