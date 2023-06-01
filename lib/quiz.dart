@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quiz/data/questions.dart';
-import 'package:flutter_quiz/questions_screen.dart';
+
 import 'package:flutter_quiz/start_screen.dart';
+import 'package:flutter_quiz/questions_screen.dart';
+import 'package:flutter_quiz/data/questions.dart';
+import 'package:flutter_quiz/results_screen.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -37,7 +39,7 @@ Widget?
 
 // 2.način, u varijablu se spremi nekakav identifikator npr. string ili broj
   List<String> selectedAnswers = [];
-  var activeScreen = "start-screen";
+  var activeScreen = 'start-screen';
 
   void switchScreen() {
     setState(() {
@@ -50,8 +52,7 @@ Widget?
 
     if (selectedAnswers.length == questions.length) {
       setState(() {
-        selectedAnswers = [];
-        activeScreen = 'start-screen';
+        activeScreen = 'results-screen';
       });
     }
   }
@@ -63,6 +64,12 @@ Widget?
     if (activeScreen == 'questions-screen') {
       screenWidget = QuestionsScreen(
         onSelectAnswer: chooseAnswer,
+      );
+    }
+
+    if (activeScreen == 'results-screen') {
+      screenWidget = ResultsScreen(
+        chosenAnswers: selectedAnswers,
       );
     }
 
