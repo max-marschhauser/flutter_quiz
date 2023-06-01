@@ -15,61 +15,45 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-// 1.način, u varijablu se spremi cijeli widget pa se njega prebacuje uokolo
-/*
-Widget?
-      activeScreen; // kreiranje varijable s tipom widget, a upitnik govori da je u prvom trenutku null, ali kasnije postate widget
+  final List<String> _selectedAnswers = [];
+  var _activeScreen = 'start-screen';
 
-  @override
-  void initState() {
-    activeScreen = StartScreen(switchScreen);
-    // var se zamjeni s Widget da bi tip varijable postao Widget
-    // ovdje je prikazan i prop drilling (tu se to zove State Lifting), u zagradi se šalje switchScreen funckija
-    super.initState();
-  }
-
-
-  void switchScreen() {
+  void _switchScreen() {
     setState(() {
-      activeScreen = const QuestionsScreen();
+      _activeScreen = 'questions-screen';
     });
   }
 
-  */
+  void _chooseAnswer(String answer) {
+    _selectedAnswers.add(answer);
 
-// 2.način, u varijablu se spremi nekakav identifikator npr. string ili broj
-  List<String> selectedAnswers = [];
-  var activeScreen = 'start-screen';
-
-  void switchScreen() {
-    setState(() {
-      activeScreen = 'questions-screen';
-    });
-  }
-
-  void chooseAnswer(String answer) {
-    selectedAnswers.add(answer);
-
-    if (selectedAnswers.length == questions.length) {
+    if (_selectedAnswers.length == questions.length) {
       setState(() {
-        activeScreen = 'results-screen';
+        _activeScreen = 'results-screen';
       });
     }
   }
 
+  void restartQuiz() {
+    setState(() {
+      _activeScreen = 'questions-screen';
+    });
+  }
+
   @override
   Widget build(context) {
-    Widget screenWidget = StartScreen(switchScreen);
+    Widget screenWidget = StartScreen(_switchScreen);
 
-    if (activeScreen == 'questions-screen') {
+    if (_activeScreen == 'questions-screen') {
       screenWidget = QuestionsScreen(
-        onSelectAnswer: chooseAnswer,
+        onSelectAnswer: _chooseAnswer,
       );
     }
 
-    if (activeScreen == 'results-screen') {
+    if (_activeScreen == 'results-screen') {
       screenWidget = ResultsScreen(
-        chosenAnswers: selectedAnswers,
+        chosenAnswers: _selectedAnswers,
+        onRestart: restartQuiz,
       );
     }
 
@@ -86,11 +70,6 @@ Widget?
               end: Alignment.bottomRight,
             ),
           ),
-          //child: activeScreen, // 1. način
-          /*child: activeScreen == 'start-screen'
-              ? StartScreen(switchScreen)
-              : const QuestionsScreen(), // 2. način
-              */
           child: screenWidget,
         ),
       ),
